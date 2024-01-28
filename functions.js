@@ -1,54 +1,74 @@
 const axios = require('axios');
+const fs = require('fs');
 
 async function cupom(telefone) {
     const url = 'https://growth.didiglobal.com/api/engine/activity/participate?';
     const respostas = [];
+    const ids = [];
 
-    const headers = {
-        'Accept': 'application/json, text/plain, */*',
-        'Accept-Language': 'pt-BR,pt;q=0.9,en;q=0.8',
-        'Connection': 'keep-alive',
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'DNT': '1',
-        'Origin': 'https://growth.99app.com',
-        'Referer': 'https://growth.99app.com/',
-        'Sec-Fetch-Dest': 'empty',
-        'Sec-Fetch-Mode': 'cors',
-        'Sec-Fetch-Site': 'cross-site',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'sec-ch-ua': '"Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
-        'sec-ch-ua-mobile': '?0',
-        'sec-ch-ua-platform': '"Windows"',
-    };
+    try {
+        // Usando leitura síncrona
+        const data = fs.readFileSync('sites.txt', 'utf-8');
+      
+        // Dividindo o conteúdo em linhas
+        const linhas = data.split('\n');
+      
+        // Iterando sobre cada linha
+        linhas.forEach(linha => {
+          // Encontrando os conjuntos de 5 números
+          const regex = /\d{5}/g;
+          let match;
+          while ((match = regex.exec(linha)) !== null) {
+            // Adicionando os IDs encontrados ao array
+            ids.push(parseInt(match[0], 10));
+          }
+        });
 
-    const ids = [32713,32715,32755,32949,33027,33029,33031,33033,33035,33037,33101];
-
-    for (const id of ids) {
-        const data = {
-            'activity_id': id,
-            'phone': telefone,
-            'calling_country_code': '55',
-            'country_code': 'BR',
-            'ticket': '',
-            'sc': '',
-            'rc': '',
-            'lng': '',
-            'lat': '',
+        const headers = {
+            'Accept': 'application/json, text/plain, */*',
+            'Accept-Language': 'pt-BR,pt;q=0.9,en;q=0.8',
+            'Connection': 'keep-alive',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'DNT': '1',
+            'Origin': 'https://growth.99app.com',
+            'Referer': 'https://growth.99app.com/',
+            'Sec-Fetch-Dest': 'empty',
+            'Sec-Fetch-Mode': 'cors',
+            'Sec-Fetch-Site': 'cross-site',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'sec-ch-ua': '"Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
+            'sec-ch-ua-mobile': '?0',
+            'sec-ch-ua-platform': '"Windows"',
         };
 
-        try {
-            const response = await axios.post(url, data, { headers });
-            console.log(response.data.errmsg)
-            if (response.data.errmsg == 'SUCC') {
-                respostas.push(`Cupom ${id} resgatado com sucesso!`);
+        for (const id of ids) {
+            const data = {
+                'activity_id': id,
+                'phone': telefone,
+                'calling_country_code': '55',
+                'country_code': 'BR',
+                'ticket': '',
+                'sc': '',
+                'rc': '',
+                'lng': '',
+                'lat': '',
+            };
+
+            try {
+                const response = await axios.post(url, data, { headers });
+                if (response.data.errmsg === 'SUCC') {
+                    respostas.push(`Cupom ${id} resgatado com sucesso!`);
+                } else {
+                    respostas.push(`Cupom ${id} não resgatado!`);
+                }
+            } catch (error) {
+                console.error(`Erro na solicitação: ${error.message}`);
             }
-            else {
-                respostas.push(`Cupom ${id} não resgatado!`);
-            }
-        } catch (error) {
-            console.error(`Erro na solicitação: ${error.message}`);
         }
+    } catch (err) {
+        console.error('Erro ao ler o arquivo:', err);
     }
+
     return respostas;
 }
 
