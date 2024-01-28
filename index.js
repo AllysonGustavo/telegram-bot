@@ -1,5 +1,5 @@
 const TelegramBot = require('node-telegram-bot-api');
-require('./env.js')
+//require('./env.js')
 const cupom = require('./functions.js')
 
 const token = process.env.token;
