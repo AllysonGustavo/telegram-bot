@@ -1,5 +1,5 @@
 const TelegramBot = require('node-telegram-bot-api');
-//require('./env.js')
+require('./env.js')
 const keep_alive = require('./keep_alive.js')
 const cupom = require('./functions.js')
 
@@ -45,7 +45,7 @@ bot.onText(/\/op1 (\d+)/, (msg, match) => {
   const numero = parseInt(match[1], 10);
 
   if (/^\d{11}$/.test(numero)) {
-    cupom(11915966413)
+    cupom(numero)
       .then((result) => {
         const resultadoFormatado = result.join('\n');
         bot.sendMessage(chatId, resultadoFormatado);

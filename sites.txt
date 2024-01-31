@@ -8,4 +8,5 @@ https://growth.99app.com/api/package/channel/coupon/index?aid=33031#/
 https://growth.99app.com/api/package/channel/coupon/index?aid=33033#/
 https://growth.99app.com/api/package/channel/coupon/index?aid=33035#/
 https://growth.99app.com/api/package/channel/coupon/index?aid=33037#/
-https://growth.99app.com/api/package/channel/coupon/index?aid=33105#/
+https://growth.99app.com/api/package/channel/coupon/index?aid=33091#/
+https://growth.99app.com/api/package/channel/coupon/index?aid=33111#/

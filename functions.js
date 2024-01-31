@@ -57,7 +57,7 @@ async function cupom(telefone) {
             try {
                 const response = await axios.post(url, data, { headers });
                 if (response.data.errmsg === 'SUCC') {
-                    respostas.push(`Cupom ${id} resgatado com sucesso!`);
+                    respostas.push(`Cupom ${response.data.data.coupons[0].title} resgatado com sucesso! ` + 'Expira em: ' + response.data.data.coupons[0].expireDate);
                 } else {
                     respostas.push(`Cupom ${id} não resgatado!`);
                 }
