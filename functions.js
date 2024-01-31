@@ -5,6 +5,7 @@ async function cupom(telefone) {
     const url = 'https://growth.didiglobal.com/api/engine/activity/participate?';
     const respostas = [];
     const ids = [];
+    let cupomRecebido = false;
 
     try {
         // Usando leitura síncrona
@@ -41,7 +42,8 @@ async function cupom(telefone) {
             'sec-ch-ua-platform': '"Windows"',
         };
 
-        for (const id of ids) {
+        for (let i = 0; i < ids.length; i++) {
+            const id = ids[i];
             const data = {
                 'activity_id': id,
                 'phone': telefone,
@@ -53,13 +55,15 @@ async function cupom(telefone) {
                 'lng': '',
                 'lat': '',
             };
-
+        
             try {
                 const response = await axios.post(url, data, { headers });
                 if (response.data.errmsg === 'SUCC') {
                     respostas.push(`Cupom ${response.data.data.coupons[0].title} resgatado com sucesso! ` + 'Expira em: ' + response.data.data.coupons[0].expireDate);
-                } else {
-                    respostas.push(`Cupom ${id} não resgatado!`);
+                    cupomRecebido = true;
+                }
+                if (i === ids.length - 1 && !cupomRecebido) {
+                    respostas.push('Não existem cupons disponíveis para esse número.');
                 }
             } catch (error) {
                 console.error(`Erro na solicitação: ${error.message}`);
@@ -68,7 +72,6 @@ async function cupom(telefone) {
     } catch (err) {
         console.error('Erro ao ler o arquivo:', err);
     }
-
     return respostas;
 }
 
