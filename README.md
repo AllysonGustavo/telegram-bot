@@ -1,4 +1,6 @@
 # telegram-bot
-Um bot do telegram para uso pessoal
+Um bot do telegram desenvolvido para uso pessoal
 
 Username: @AllysongsBot
+
+Bot hospedado gratuitamente na [Oracle](https://www.oracle.com/br/).
