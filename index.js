@@ -39,9 +39,9 @@ bot.on('callback_query', (callbackQuery) => {
 
   if (data === 'Comandos') {
     bot.sendMessage(chatId, `
-      /start — Mostra o menu de interação do bot.
-      /op1 11912345678 — Colocará os cupons da 99 pop nesse número.
-      /cam — Todos os cupons ativos da Americanas.
+    /start — Mostra o menu de interação do bot.
+/op1 11912345678 — Colocará os cupons da 99 pop nesse número.
+/cam — Todos os cupons ativos da Americanas.
     `);
   } else if (data === 'Creditos') {
     bot.sendMessage(chatId, 'Desenvolvido por: Allyson Gustavo');
