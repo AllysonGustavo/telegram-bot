@@ -38,9 +38,32 @@ bot.on('callback_query', (callbackQuery) => {
   const chatId = callbackQuery.message.chat.id;
 
   if (data === 'Comandos') {
-    bot.sendMessage(chatId, '/op1 11912345678 - O bot colocará os cupons do 99 pop nesse número.');
+    bot.sendMessage(chatId, `
+      /start — Mostra o menu de interação do bot.
+      /op1 11912345678 — Colocará os cupons da 99 pop nesse número.
+      /cam — Todos os cupons ativos da Americanas.
+    `);
   } else if (data === 'Creditos') {
     bot.sendMessage(chatId, 'Desenvolvido por: Allyson Gustavo');
+  }
+});
+
+bot.onText(/\/cam/, async (msg) => {
+  const chatId = msg.chat.id;
+  try {
+    const cupons = await functions.cupomAmericanas();
+    if (!Array.isArray(cupons) || cupons.length === 0) {
+      bot.sendMessage(chatId, 'Não há cupons disponíveis no momento.');
+      return;
+    }
+    const respostaFormatada = cupons.map((cupom, index) => {
+      return cupom + (index % 3 === 2 && index !== cupons.length - 1 ? '\n' : ' — ');
+    }).join('').slice(0, -3); // Retirar o último caractere
+    
+    bot.sendMessage(chatId, respostaFormatada);
+  } catch (error) {
+    console.error('Erro ao obter cupons:', error);
+    bot.sendMessage(chatId, 'Ocorreu um erro ao obter os cupons.');
   }
 });
 
@@ -53,7 +76,7 @@ bot.onText(/\/op1 (\d+)/, (msg, match) => {
       bot.sendMessage(chatId, 'Desculpe, o bot está atualizando. Tente novamente mais tarde.');
     } else {
       functions.createLockFile(); // Bloqueia a execução do /op1
-      functions.cupom(numero)
+      functions.cupom99(numero)
         .then((result) => {
           const resultadoFormatado = result.join('\n');
           bot.sendMessage(chatId, resultadoFormatado);

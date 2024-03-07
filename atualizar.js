@@ -37,7 +37,7 @@ let inicioDaProcura, fimDaProcura;
 
 fs.readFile('sites.txt', 'utf8', (err, data) => {
     if (err) return console.log('Erro ao ler o número de inicio/fim da procura:', err);
-    inicioDaProcura = (data.match(/\d{5}/g) || [])[0].slice(0, 2) * 1000; // ID do cupom que será iniciado a procura
+    inicioDaProcura = ((data.match(/\d{5}/g) || [])[0].slice(0, 2) * 1000) - 1000; // ID do cupom que será iniciado a procura
     fimDaProcura = inicioDaProcura + 2000; // ID do cupom que será finalizado a procura
     
     main();
