@@ -60,25 +60,33 @@ bot.onText(/\/cam/, async (msg) => {
       return cupom + (index % 3 === 2 && index !== cupons.length - 1 ? '\n' : ' — ');
     }).join('').slice(0, -3); // Retirar o último caractere
     
-    bot.sendMessage(chatId, respostaFormatada);
+    bot.sendMessage(chatId, 'Cupons ativos da Americanas\n'+respostaFormatada);
   } catch (error) {
     console.error('Erro ao obter cupons:', error);
     bot.sendMessage(chatId, 'Ocorreu um erro ao obter os cupons.');
   }
 });
 
-bot.onText(/\/op1 (\d+)/, (msg, match) => {
+bot.onText(/\/op1 (.+)/, (msg, match) => {
   const chatId = msg.chat.id;
-  const numero = parseInt(match[1], 10);
+  var numero = match[1];
 
+  if (numero.startsWith("+55")) {
+    numero = numero.substring(3);
+  }
+  
   if (/^\d{11}$/.test(numero)) {
     if (functions.getScriptRunningStatus()) {
-      bot.sendMessage(chatId, 'Desculpe, o bot está atualizando. Tente novamente mais tarde.');
+      bot.sendMessage(
+        chatId,
+        "Desculpe, o bot está atualizando. Tente novamente mais tarde.",
+      );
     } else {
       functions.createLockFile(); // Bloqueia a execução do /op1
-      functions.cupom99(numero)
+      functions
+        .cupom99(numero)
         .then((result) => {
-          const resultadoFormatado = result.join('\n');
+          const resultadoFormatado = result.join("\n");
           bot.sendMessage(chatId, resultadoFormatado);
         })
         .catch((error) => {
@@ -89,6 +97,9 @@ bot.onText(/\/op1 (\d+)/, (msg, match) => {
         });
     }
   } else {
-    bot.sendMessage(chatId, 'Por favor, envie um número válido. Exemplo: 11912345678');
+    bot.sendMessage(
+      chatId,
+      "Por favor, envie um número válido. Exemplo: 11912345678 ou +5511912345678",
+    );
   }
 });

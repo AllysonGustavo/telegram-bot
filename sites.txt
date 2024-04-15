@@ -1,5 +1,5 @@
-https://growth.99app.com/api/package/channel/coupon/index?aid=33203#/
-https://growth.99app.com/api/package/channel/coupon/index?aid=33205#/
-https://growth.99app.com/api/package/channel/coupon/index?aid=33207#/
-https://growth.99app.com/api/package/channel/coupon/index?aid=33209#/
-https://growth.99app.com/api/package/channel/coupon/index?aid=33271#/
+https://growth.99app.com/api/package/channel/coupon/index?aid=33437#/
+https://growth.99app.com/api/package/channel/coupon/index?aid=33441#/
+https://growth.99app.com/api/package/channel/coupon/index?aid=33463#/
+https://growth.99app.com/api/package/channel/coupon/index?aid=33473#/
+https://growth.99app.com/api/package/channel/coupon/index?aid=33475#/

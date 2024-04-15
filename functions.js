@@ -168,37 +168,41 @@ async function cupomAmericanas() {
     for (let i = 0; i < response.length; i++) {
       const index = response.indexOf(searchString, i);
       if (index !== -1) {
-        if (nomeCupom) {
-          respostas.push(response.slice(index, response.indexOf("<", index)));
-          nomeCupom = false;
-        } else {
-          respostas.push(response.slice(index, response.indexOf(";", index)));
-          let indexx = response.indexOf("Válido até");
-          if (indexx !== -1) {
-            let endIndex = indexx + 21; // Todo a mensagem de "Válido até"
-            let substring = response.substring(indexx, endIndex);
-            respostas.push(substring);
-          }
-          nomeCupom = true;
-        }
-        i = index + searchString.length - 1;
+        let cupom = response.slice(index, response.indexOf("<", index));
+        cupom = cupom.replace(/\n/g, " "); // Substituir quebras de linha por espaços
+        respostas.push(cupom);
+        nomeCupom = !nomeCupom;
+        i = response.indexOf(";", index); // Move para o próximo ponto e vírgula
       } else {
         // Se não houver mais ocorrencias para o loop
+        // Remover cupons que possuem porcentagem
+        for (let i = 0; i < respostas.length; i++) {
+          if (respostas[i].includes('%')) {
+            if (i > 0) {
+              respostas.splice(i - 1, 1);
+              i--; // Atualiza o índice após remover o item
+            } else {
+              respostas.splice(i, 1);
+            }
+          }
+        }
         // Calcular cupom mais barato
         for (let i = 0; i < respostas.length; i++) {
           if (i % 3 == 1) {
             arrayRegex = respostas[i].match(/\d+/g);
-            desconto = parseInt(arrayRegex[0]);
-            minimo = parseInt(arrayRegex[1]);
-            calculo = (100 * desconto) / minimo;
-            if (calculo > menorDesconto) {
-              menorDesconto = calculo;
-              menorDescontoI = i;
+            if (arrayRegex !== null) { // Verifica se há correspondências
+              desconto = parseInt(arrayRegex[0]);
+              minimo = parseInt(arrayRegex[1]);
+              calculo = (100 * desconto) / minimo;
+              if (calculo > menorDesconto) {
+                menorDesconto = calculo;
+                menorDescontoI = i;
+              }
             }
           }
         }
         respostas.push(
-          "Cupon(s) recomendado(s):",
+          "Cupom recomendado:",
           respostas[menorDescontoI - 1],
         );
         break;
@@ -207,6 +211,7 @@ async function cupomAmericanas() {
   } catch (error) {
     console.error("Erro:", error);
   }
+  console.log(respostas)
   return respostas;
 }
 
