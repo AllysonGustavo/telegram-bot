@@ -92,7 +92,7 @@ bot.onText(/\/op1 (.+)/, (msg, match) => {
 
   if (/^\d{11}$/.test(numero)) {
     let config = require("./config.json");
-    if (!config.updateIsRunning) {
+    if (config.updateIsRunning) {
       bot.sendMessage(
         chatId,
         "Desculpe, o bot está atualizando. Tente novamente mais tarde."
